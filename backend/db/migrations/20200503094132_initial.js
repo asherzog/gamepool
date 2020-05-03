@@ -32,7 +32,7 @@ exports.up = async (knex) => {
     knex.schema.createTable(tableNames.team, (table) => {
       table.increments().notNullable()
       table.string('name', 50).notNullable().unique()
-      table.string('city', 50).notNullable()
+      table.string('location', 50).notNullable()
       table.string('logo_url', 2000)
       addDefaultColumns(table)
     })
@@ -74,5 +74,5 @@ exports.down = async (knex) => {
     tableNames.user,
     tableNames.league,
     tableNames.team
-  ].map(name => knex.schema.dropTable(name)))
+  ].map(name => knex.schema.dropTableIfExists(name)))
 }
