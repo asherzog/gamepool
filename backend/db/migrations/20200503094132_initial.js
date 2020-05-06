@@ -48,12 +48,16 @@ exports.up = async (knex) => {
     createReference(table, 'home_id', tableNames.team)
     createReference(table, 'away_id', tableNames.team)
     createReference(table, 'winning_id', tableNames.team)
+    addDefaultColumns(table)
   })
 
   await knex.schema.createTable(tableNames.user_league, (table) => {
     table.increments().notNullable()
     createReference(table, 'league_id', tableNames.league)
     createReference(table, 'user_id', tableNames.user)
+    table.boolean('is_admin').notNullable().defaultTo(false)
+    table.boolean('is_creator').notNullable().defaultTo(false)
+    addDefaultColumns(table)
   })
 
   await knex.schema.createTable(tableNames.pick, (table) => {
@@ -63,6 +67,7 @@ exports.up = async (knex) => {
     createReference(table, 'user_id', tableNames.user)
     createReference(table, 'game_id', tableNames.game)
     createReference(table, 'team_id', tableNames.team)
+    addDefaultColumns(table)
   })
 }
 
