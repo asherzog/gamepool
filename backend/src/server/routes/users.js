@@ -6,6 +6,28 @@ const leagueUserQueries = require('../../../db/queries/leagueUsers')
 const router = new Router()
 const BASE_URL = `/api/v1/users`
 
+/**
+   * @swagger
+   * /users:
+   *   get:
+   *     summary: Fetch all users
+   *     tags:
+   *      - Users
+   *     produces:
+   *      - application/json
+   *     responses:
+   *       200:
+   *         description: list of all users
+   *         schema:
+   *           type: object
+   *           properties:
+   *             status:
+   *               type: string
+   *             data: 
+   *               type: array
+   *               items:
+   *                 $ref: '#/definitions/User'
+   */
 router.get(BASE_URL, async (ctx) => {
   try {
     const users = await queries.getAllUsers()
@@ -18,6 +40,35 @@ router.get(BASE_URL, async (ctx) => {
   }
 })
 
+/**
+   * @swagger
+   * /users/{userId}:
+   *   get:
+   *     summary: Fetch single user
+   *     tags:
+   *      - Users
+   *     produces:
+   *      - application/json
+   *     parameters: 
+   *      - in: path
+   *        name: userId
+   *        schema: 
+   *          type: integer
+   *          required: true
+   *          description: Id of user to fetch
+   *     responses:
+   *       200:
+   *         description: single user
+   *         schema:
+   *           type: object
+   *           properties:
+   *             status:
+   *               type: string
+   *             data: 
+   *               $ref: '#/definitions/User'
+   *       404:
+   *         $ref: '#/responses/NotFound'
+   */
 router.get(`${BASE_URL}/:id`, async (ctx) => {
   try {
     const id = ctx.params.id
@@ -39,6 +90,51 @@ router.get(`${BASE_URL}/:id`, async (ctx) => {
   }
 })
 
+/**
+   * @swagger
+   * /users:
+   *   post:
+   *     summary: Create a new user
+   *     consumes:
+   *      - application/json
+   *     parameters:
+   *      - in: body
+   *        name: user
+   *        description: The user to create
+   *        schema: 
+   *          allOf: 
+   *           - $ref: '#/definitions/User'
+   *          type: object
+   *          example:
+   *            name: user
+   *            email: user@user.com
+   *            password: myP4ssWord
+   *            user_league: 4
+   *          required: 
+   *           - name
+   *           - email
+   *           - password
+   *          properties: 
+   *            password: 
+   *              type: string
+   *              format: password
+   *            user_league: 
+   *              type: integer
+   *     tags:
+   *      - Users
+   *     produces:
+   *      - application/json
+   *     responses:
+   *       200:
+   *         description: created new user
+   *         schema:
+   *           type: object
+   *           properties:
+   *             status:
+   *               type: string
+   *             data: 
+   *               $ref: '#/definitions/User'
+   */
 router.post(`${BASE_URL}`, async (ctx) => {
   try {
     // TODO: Validate request 
@@ -84,6 +180,58 @@ router.post(`${BASE_URL}`, async (ctx) => {
   }
 })
 
+/**
+   * @swagger
+   * /users/{userId}:
+   *   put:
+   *     summary: Update a user
+   *     consumes:
+   *      - application/json
+   *     parameters:
+   *      - in: path
+   *        name: userId
+   *        schema: 
+   *          type: integer
+   *          required: true
+   *          description: Id of user to fetch
+   *      - in: body
+   *        name: user
+   *        description: The user to create
+   *        schema: 
+   *          allOf: 
+   *           - $ref: '#/definitions/User'
+   *          type: object
+   *          example:
+   *            name: user
+   *            email: user@user.com
+   *            password: myP4ssWord
+   *            user_league: 4
+   *          properties: 
+   *            password: 
+   *              type: string
+   *              format: password
+   *            user_league: 
+   *              type: integer
+   *     tags:
+   *      - Users
+   *     produces:
+   *      - application/json
+   *     responses:
+   *       200:
+   *         description: updated user
+   *         schema:
+   *           type: object
+   *           properties:
+   *             status:
+   *               type: string
+   *             data:
+   *               allOf: 
+   *                - $ref: '#/definitions/User'
+   *               properties:
+   *                  updated_at:
+   *                    type: string
+   *                    format: date-time
+   */
 router.put(`${BASE_URL}/:id`, async (ctx) => {
   try {
     // TODO: Validate request
@@ -117,6 +265,40 @@ router.put(`${BASE_URL}/:id`, async (ctx) => {
   }
 })
 
+/**
+   * @swagger
+   * /users/{userId}:
+   *   delete:
+   *     summary: soft delete a user
+   *     consumes:
+   *      - application/json
+   *     parameters:
+   *      - in: path
+   *        name: userId
+   *        schema: 
+   *          type: integer
+   *          required: true
+   *          description: Id of user to delete
+   *     tags:
+   *      - Users
+   *     produces:
+   *      - application/json
+   *     responses:
+   *       200:
+   *         description: deleted user
+   *         schema:
+   *           type: object
+   *           properties:
+   *             status:
+   *               type: string
+   *             data:
+   *               allOf: 
+   *                - $ref: '#/definitions/User'
+   *               properties:
+   *                  deleted_at:
+   *                    type: string
+   *                    format: date-time
+   */
 router.delete(`${BASE_URL}/:id`, async (ctx) => {
   try {
     const id = ctx.params.id 
