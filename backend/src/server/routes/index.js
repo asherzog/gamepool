@@ -18,11 +18,27 @@ router.get('/ping', async (ctx) => {
  *      description: The specified resource was not found
  *      schema:
  *        $ref: '#/definitions/Error'
+ *    NonSuccess:
+ *      description: The specified action could not be completed
+ *      schema:
+ *        $ref: '#/definitions/Error'
  */
 
 /**
  * @swagger
  * definitions:
+ *   League:
+ *     type: object
+ *     properties:
+ *       name:
+ *         type: string
+ *         example: "my league"
+ *       id: 
+ *         type: integer
+ *         example: 5
+ *       created_at: 
+ *         type: string
+ *         format: date-time
  *   User:
  *     type: object
  *     properties:

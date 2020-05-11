@@ -24,7 +24,7 @@ function getAllLeagues() {
 
 function getLeagueById(id) {
   return knex
-    .select('id', 'name', 'created_at', 'deleted_at')
+    .select('id', 'name', 'created_at', 'deleted_at', 'updated_at')
     .from(tableNames.league)
     .where({ id: parseInt(id) })
 }
@@ -34,7 +34,7 @@ function updateLeague(id, league) {
     .update(league)
     .update('updated_at', knex.fn.now())
     .where({ id: parseInt(id) })
-    .returning(['id', 'name', 'created_at'])
+    .returning(['id', 'name', 'created_at', 'updated_at'])
 }
 
 module.exports = {
