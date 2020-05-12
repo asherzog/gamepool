@@ -7,7 +7,11 @@ function createUser(user) {
     .returning(['id', 'name', 'email', 'last_login'])
 }
 
-function deleteUser(id) {
+async function deleteUser(id) {
+  await knex(tableNames.user_league)
+  .update('deleted_at', knex.fn.now())
+  .where({ id: parseInt(id) })
+
   return knex(tableNames.user)
     .update('deleted_at', knex.fn.now())
     .where({ id: parseInt(id) })
