@@ -54,6 +54,21 @@ router.get('/ping', async (ctx) => {
  *       last_login: 
  *         type: string
  *         format: date-time
+ *   Team:
+ *     type: object
+ *     properties:
+ *       id: 
+ *         type: integer
+ *         example: 12
+ *       name:
+ *         type: string
+ *         example: Packers
+ *       location:
+ *         type: string 
+ *         example: Green Bay
+ *       logo_url:
+ *         type: string
+ *         example: https://example.com
  *   Error:
  *     type: object
  *     properties: 
