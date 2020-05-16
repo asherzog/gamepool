@@ -40,144 +40,6 @@ router.get('/', async (ctx) => {
 
 /**
    * @swagger
-   * /leagues/{leagueId}:
-   *   get:
-   *     summary: Fetch single league
-   *     tags:
-   *      - Leagues
-   *     produces:
-   *      - application/json
-   *     parameters: 
-   *      - in: path
-   *        name: leagueId
-   *        schema: 
-   *          type: integer
-   *          required: true
-   *          description: Id of league to fetch
-   *     responses:
-   *       200:
-   *         description: single league
-   *         schema:
-   *           type: object
-   *           properties:
-   *             status:
-   *               type: string
-   *             data:
-   *               allOf: 
-   *                 - $ref: '#/definitions/League'
-   *               properties:
-   *                 deleted_at: 
-   *                   type: string
-   *                   format: date-time
-   *                 updated_at: 
-   *                   type: string
-   *                   format: date-time
-   *                 users:
-   *                   type: array
-   *                   items:
-   *                     type: object
-   *                     properties: 
-   *                       user_id: 
-   *                         type: integer
-   *                         example: 3
-   *                       user_name: 
-   *                         type: string
-   *                         example: Andy
-   *                       email: 
-   *                         type: string
-   *                         example: user@user.com
-   *                       is_admin: 
-   *                         type: boolean
-   *                         example: true
-   *       404: 
-   *         $ref: '#/responses/NotFound'
-   */
-router.get('/:id', async (ctx) => {
-  try {
-    const id = ctx.params.id
-    const league = await queries.getLeagueById(id)
-    const users = await leagueUserQueries.getAllLeagueUsers(id)
-    if (league.length) {
-      ctx.body = {
-        status: 'success',
-        data: {...league[0], users}
-      }
-    } else {
-      ctx.status = 404
-      ctx.body = {
-        status: 'error',
-        message: `leagueID: ${ctx.params.id} not found`
-      }
-    }
-  } catch (err) {
-    console.log(err)
-  }
-})
-
-/**
-   * @swagger
-   * /leagues/{leagueId}/users:
-   *   get:
-   *     summary: Fetch single league's users
-   *     tags:
-   *      - Leagues
-   *     produces:
-   *      - application/json
-   *     parameters: 
-   *      - in: path
-   *        name: leagueId
-   *        schema: 
-   *          type: integer
-   *          required: true
-   *          description: Id of league to fetch users for
-   *     responses:
-   *       200:
-   *         description: single league's users
-   *         schema:
-   *           type: object
-   *           properties:
-   *             status:
-   *               type: string
-   *             data:
-   *               type: array
-   *               items:
-   *                 type: object
-   *                 properties: 
-   *                   user_id: 
-   *                     type: integer
-   *                     example: 3
-   *                   user_name: 
-   *                     type: string
-   *                     example: Andy
-   *                   email: 
-   *                     type: string
-   *                     example: user@user.com
-   *                   is_admin: 
-   *                     type: boolean
-   *                     example: true
-   *       404: 
-   *         $ref: '#/responses/NotFound'
-   */
-router.get('/:id/users', async (ctx) => {
-  try {
-    const id = ctx.params.id
-    const users = await leagueUserQueries.getAllLeagueUsers(id)
-    ctx.body = {
-      status: 'success',
-      data: users
-    }
-  } catch (err) {
-    console.log(err)
-    ctx.status = 400
-    ctx.body = {
-      status: 'error',
-      message: err.message || 'Sorry, an error has occurred.'
-    }
-  }
-})
-
-/**
-   * @swagger
    * /leagues:
    *   post:
    *     summary: Create a new league
@@ -275,9 +137,9 @@ router.post('/', async (ctx) => {
 
 /**
    * @swagger
-   * /leagues/{leagueId}/users:
-   *   post:
-   *     summary: Add user to league
+   * /leagues/{leagueId}:
+   *   get:
+   *     summary: Fetch single league
    *     tags:
    *      - Leagues
    *     produces:
@@ -288,25 +150,10 @@ router.post('/', async (ctx) => {
    *        schema: 
    *          type: integer
    *          required: true
-   *          description: Id of league to add user to
-   *      - in: body
-   *        name: user
-   *        description: The user to add
-   *        schema: 
-   *          type: object
-   *          example:
-   *            is_admin: false
-   *            user_id: 3
-   *          required: 
-   *           - user_id
-   *          properties: 
-   *            user_id: 
-   *              type: integer
-   *            is_admin: 
-   *              type: boolean
+   *          description: Id of league to fetch
    *     responses:
-   *       201:
-   *         description: user added to league
+   *       200:
+   *         description: single league
    *         schema:
    *           type: object
    *           properties:
@@ -339,41 +186,28 @@ router.post('/', async (ctx) => {
    *                       is_admin: 
    *                         type: boolean
    *                         example: true
-   *       424: 
-   *         $ref: '#/responses/NonSuccess'
+   *       404: 
+   *         $ref: '#/responses/NotFound'
    */
-router.post('/:id/users', async (ctx) => {
+router.get('/:id', async (ctx) => {
   try {
-    // TODO: Validate request 
-    const league_id = ctx.params.id
-    let user_id = ctx.request.body.user_id
-    const league = await queries.getLeagueById(league_id)
-    const user = await leagueUserQueries.createLeagueUser({
-      user_id,
-      league_id,
-      is_admin: !!ctx.request.body.is_admin
-    })
-    if (user.length && league.length) {
-      const users = await leagueUserQueries.getAllLeagueUsers(league_id)
-      ctx.status = 201;
+    const id = ctx.params.id
+    const league = await queries.getLeagueById(id)
+    const users = await leagueUserQueries.getAllLeagueUsers(id)
+    if (league.length) {
       ctx.body = {
         status: 'success',
         data: {...league[0], users}
       }
-    } else { 
-      ctx.status = 400;
+    } else {
+      ctx.status = 404
       ctx.body = {
         status: 'error',
-        message: 'Unable to post new league user'
+        message: `leagueID: ${ctx.params.id} not found`
       }
     }
   } catch (err) {
     console.log(err)
-    ctx.status = 400;
-    ctx.body = {
-      status: 'error',
-      message: err.message || 'Sorry, an error has occurred.'
-    };
   }
 })
 
@@ -564,6 +398,172 @@ router.delete('/:id', async (ctx) => {
 
 /**
    * @swagger
+   * /leagues/{leagueId}/users:
+   *   get:
+   *     summary: Fetch single league's users
+   *     tags:
+   *      - Leagues
+   *     produces:
+   *      - application/json
+   *     parameters: 
+   *      - in: path
+   *        name: leagueId
+   *        schema: 
+   *          type: integer
+   *          required: true
+   *          description: Id of league to fetch users for
+   *     responses:
+   *       200:
+   *         description: single league's users
+   *         schema:
+   *           type: object
+   *           properties:
+   *             status:
+   *               type: string
+   *             data:
+   *               type: array
+   *               items:
+   *                 type: object
+   *                 properties: 
+   *                   user_id: 
+   *                     type: integer
+   *                     example: 3
+   *                   user_name: 
+   *                     type: string
+   *                     example: Andy
+   *                   email: 
+   *                     type: string
+   *                     example: user@user.com
+   *                   is_admin: 
+   *                     type: boolean
+   *                     example: true
+   *       404: 
+   *         $ref: '#/responses/NotFound'
+   */
+router.get('/:id/users', async (ctx) => {
+  try {
+    const id = ctx.params.id
+    const users = await leagueUserQueries.getAllLeagueUsers(id)
+    ctx.body = {
+      status: 'success',
+      data: users
+    }
+  } catch (err) {
+    console.log(err)
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Sorry, an error has occurred.'
+    }
+  }
+})
+
+/**
+   * @swagger
+   * /leagues/{leagueId}/users:
+   *   post:
+   *     summary: Add user to league
+   *     tags:
+   *      - Leagues
+   *     produces:
+   *      - application/json
+   *     parameters: 
+   *      - in: path
+   *        name: leagueId
+   *        schema: 
+   *          type: integer
+   *          required: true
+   *          description: Id of league to add user to
+   *      - in: body
+   *        name: user
+   *        description: The user to add
+   *        schema: 
+   *          type: object
+   *          example:
+   *            is_admin: false
+   *            user_id: 3
+   *          required: 
+   *           - user_id
+   *          properties: 
+   *            user_id: 
+   *              type: integer
+   *            is_admin: 
+   *              type: boolean
+   *     responses:
+   *       201:
+   *         description: user added to league
+   *         schema:
+   *           type: object
+   *           properties:
+   *             status:
+   *               type: string
+   *             data:
+   *               allOf: 
+   *                 - $ref: '#/definitions/League'
+   *               properties:
+   *                 deleted_at: 
+   *                   type: string
+   *                   format: date-time
+   *                 updated_at: 
+   *                   type: string
+   *                   format: date-time
+   *                 users:
+   *                   type: array
+   *                   items:
+   *                     type: object
+   *                     properties: 
+   *                       user_id: 
+   *                         type: integer
+   *                         example: 3
+   *                       user_name: 
+   *                         type: string
+   *                         example: Andy
+   *                       email: 
+   *                         type: string
+   *                         example: user@user.com
+   *                       is_admin: 
+   *                         type: boolean
+   *                         example: true
+   *       424: 
+   *         $ref: '#/responses/NonSuccess'
+   */
+router.post('/:id/users', async (ctx) => {
+  try {
+    // TODO: Validate request 
+    const league_id = ctx.params.id
+    let user_id = ctx.request.body.user_id
+    const league = await queries.getLeagueById(league_id)
+    const user = await leagueUserQueries.createLeagueUser({
+      user_id,
+      league_id,
+      is_admin: !!ctx.request.body.is_admin
+    })
+    if (user.length && league.length) {
+      const users = await leagueUserQueries.getAllLeagueUsers(league_id)
+      ctx.status = 201;
+      ctx.body = {
+        status: 'success',
+        data: {...league[0], users}
+      }
+    } else { 
+      ctx.status = 400;
+      ctx.body = {
+        status: 'error',
+        message: 'Unable to post new league user'
+      }
+    }
+  } catch (err) {
+    console.log(err)
+    ctx.status = 400;
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Sorry, an error has occurred.'
+    };
+  }
+})
+
+/**
+   * @swagger
    * /leagues/{leagueId}/users/{userId}:
    *   delete:
    *     summary: Remove user from league
@@ -652,4 +652,53 @@ router.delete('/:id', async (ctx) => {
       };
     }
   })
+
+
+/**
+   * @swagger
+   * /leagues/users/{userId}:
+   *   get:
+   *     summary: Fetch all leagues for a user
+   *     tags:
+   *      - Leagues
+   *     produces:
+   *      - application/json
+   *     parameters: 
+   *      - in: path
+   *        name: userId
+   *        schema: 
+   *          type: integer
+   *          required: true
+   *          description: Id of user to fetch leagues for
+   *     responses:
+   *       200:
+   *         description: single user's leagues
+   *         schema:
+   *           type: object
+   *           properties:
+   *             status:
+   *               type: string
+   *             data: 
+   *               type: array
+   *               items:
+   *                 $ref: '#/definitions/League'
+   */
+router.get('/users/:id', async (ctx) => {
+  try {
+    const id = ctx.params.id
+    const leagues = await queries.getAllLeaguesForUser(id)
+    ctx.body = {
+      status: 'success',
+      data: leagues
+    }
+  } catch (err) {
+    console.log(err)
+    ctx.status = 400
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Sorry, an error has occurred.'
+    }
+  }
+})
+
 module.exports = router
