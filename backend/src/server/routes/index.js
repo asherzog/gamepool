@@ -27,6 +27,33 @@ router.get('/ping', async (ctx) => {
 /**
  * @swagger
  * definitions:
+ *   Game:
+ *     type: object
+ *     properties:
+ *       id: 
+ *         type: integer
+ *         example: 2
+ *       home_id:
+ *         type: integer
+ *         example: 12
+ *       away_id:
+ *         type: integer
+ *         example: 14
+ *       winning_id: 
+ *          type: integer
+ *          example: 12
+ *       home_score:
+ *          type: integer
+ *          example: 24
+ *       away_score:
+ *          type: integer
+ *          example: 10
+ *       game_time: 
+ *          type: string
+ *          format: date-time
+ *       season_week:
+ *          type: integer
+ *          example: 5
  *   League:
  *     type: object
  *     properties:

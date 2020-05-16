@@ -20,7 +20,8 @@ exports.seed = async (knex) => {
   await orderedTables
     .reduce(async (promise, name) => {
       await promise
-      return knex(name).del()
+      await knex(name).del()
+      return knex.raw(`ALTER SEQUENCE ${name}_id_seq RESTART WITH 1`) 
     }, Promise.resolve())
 
   const password = crypto.randomBytes(15).toString('hex')
@@ -34,7 +35,16 @@ exports.seed = async (knex) => {
   const [createdUser] = await knex(tableNames.user).insert(user).returning('*')
 
   console.log(`user created: `, {
-    password}, createdUser);
+    password}, createdUser)
   
   await knex(tableNames.team).insert(teams).returning('*')
+
+  const game = { 
+    home_id: 12,
+    away_id: 15,
+    game_time: new Date(),
+    season_week: '20-5'
+  }
+
+  await knex(tableNames.game).insert(game).returning('*')
 };

@@ -9,6 +9,7 @@ const indexRoutes = require('./routes/index')
 const userRoutes = require('./routes/users')
 const teamRoutes = require('./routes/teams')
 const leagueRoutes = require('./routes/leagues')
+const gameRoutes = require('./routes/games')
 
 const app = new Koa()
 const PORT = process.env.PORT || 3000;
@@ -32,6 +33,7 @@ app.use(indexRoutes.routes())
 app.use(userRoutes.routes())
 app.use(teamRoutes.routes())
 app.use(leagueRoutes.routes())
+app.use(gameRoutes.routes())
 
 const server = app.listen(PORT, () => {
   console.log(`Server listening on port: ${PORT}`)
