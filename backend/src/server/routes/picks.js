@@ -1,22 +1,22 @@
 const Router = require('koa-router')
-const queries = require('../../../db/queries/games')
+const queries = require('../../../db/queries/picks')
 const teamQueries = require('../../../db/queries/teams')
 
 const router = new Router()
-const BASE_URL = `/api/v1/games`
+const BASE_URL = `/api/v1/picks`
 
 /**
    * @swagger
-   * /games:
+   * /picks:
    *   get:
-   *     summary: Fetch all games
+   *     summary: Fetch all picks
    *     tags:
-   *      - Games
+   *      - Picks
    *     produces:
    *      - application/json
    *     responses:
    *       200:
-   *         description: list of all Games
+   *         description: list of all Picks
    *         schema:
    *           type: object
    *           properties:
@@ -25,14 +25,14 @@ const BASE_URL = `/api/v1/games`
    *             data: 
    *               type: array
    *               items:
-   *                 $ref: '#/definitions/Game'
+   *                 $ref: '#/definitions/Pick'
    */
 router.get(BASE_URL, async (ctx) => {
   try {
-    const games = await queries.getAllGames()
+    const picks = await queries.getAllPicks()
     ctx.body = {
       status: 'success',
-      data: games
+      data: picks
     }
   } catch (err) {
     console.log(err)
@@ -46,47 +46,47 @@ router.get(BASE_URL, async (ctx) => {
 
 /**
    * @swagger
-   * /games:
+   * /picks:
    *   post:
-   *     summary: Create new Game
+   *     summary: Create new Pick
    *     tags:
-   *      - Games
+   *      - Picks
    *     produces:
    *      - application/json
    *     parameters: 
    *      - in: body
-   *        name: game
-   *        description: The game to be created
+   *        name: pick
+   *        description: The pick to be created
    *        schema: 
    *          allOf: 
-   *           - $ref: '#/definitions/Game'
+   *           - $ref: '#/definitions/Pick'
    *     responses:
    *       200:
-   *         description: updated Game
+   *         description: new Pick
    *         schema:
    *           type: object
    *           properties:
    *             status:
    *               type: string
    *             data: 
-   *               $ref: '#/definitions/Game'
+   *               $ref: '#/definitions/Pick'
    *       424: 
    *         $ref: '#/responses/NonSuccess'
    */
   router.post(BASE_URL, async (ctx) => {
     try {
       let req = ctx.request.body
-      const games = await queries.createGame(req)
-      if (games.length > 0) {
+      const pick = await queries.createPick(req)
+      if (pick.length > 0) {
         ctx.body = {
           status: 'success',
-          data: games[0]
+          data: pick[0]
         }
       } else {
         ctx.status = 424
         ctx.body = {
           status: 'error',
-          message: 'Unable to create game'
+          message: 'Unable to create pick'
         }
       }
     } catch (err) {
@@ -101,23 +101,23 @@ router.get(BASE_URL, async (ctx) => {
 
 /**
    * @swagger
-   * /games/{gameId}:
+   * /picks/{pickId}:
    *   get:
-   *     summary: Fetch single game
+   *     summary: Fetch single pick
    *     tags:
-   *      - Games
+   *      - Picks
    *     produces:
    *      - application/json
    *     parameters: 
    *      - in: path
-   *        name: gameId
+   *        name: pickId
    *        schema: 
    *          type: integer
    *          required: true
-   *          description: Id of game to fetch
+   *          description: Id of pick to fetch
    *     responses:
    *       200:
-   *         description: Single Game
+   *         description: Single pick
    *         schema:
    *           type: object
    *           properties:
@@ -125,33 +125,25 @@ router.get(BASE_URL, async (ctx) => {
    *               type: string
    *             data: 
    *               allOf:
-   *                - $ref: '#/definitions/Game'
-   *               properties:
-   *                 home: 
-   *                   type: object
-   *                   $ref: '#/definitions/Team'
-   *                 away: 
-   *                   type: object
-   *                   $ref: '#/definitions/Team'
+   *                - $ref: '#/definitions/Pick'
    *       404: 
    *         $ref: '#/responses/NotFound'
    */
 router.get(`${BASE_URL}/:id`, async (ctx) => {
   try {
     const id = ctx.params.id
-    const games = await queries.getGameById(id)
-    if (games.length > 0) {
-      const home = await teamQueries.getTeamById(games[0].home_id)
-      const away = await teamQueries.getTeamById(games[0].away_id)
+    const pick = await queries.getPickById(id)
+    if (pick.length > 0) {
+      const winner = await teamQueries.getTeamById(pick[0].team_id)
       ctx.body = {
         status: 'success',
-        data: {...games[0], home, away}
+        data: {...pick[0], winner}
       }
     } else {
       ctx.status = 404
       ctx.body = {
         status: 'error',
-        message: `GameID: ${id} not found`
+        message: `PickID: ${id} not found`
       }
     }
   } catch (err) {
@@ -166,36 +158,36 @@ router.get(`${BASE_URL}/:id`, async (ctx) => {
 
 /**
    * @swagger
-   * /games/{gameId}:
+   * /picks/{pickId}:
    *   put:
-   *     summary: Update single game
+   *     summary: Update single pick
    *     tags:
    *      - Games
    *     produces:
    *      - application/json
    *     parameters: 
    *      - in: path
-   *        name: gameId
+   *        name: pickId
    *        schema: 
    *          type: integer
    *          required: true
-   *          description: Id of game to fetch
+   *          description: Id of pick to fetch
    *      - in: body
-   *        name: game
-   *        description: The game to be updated
+   *        name: pick
+   *        description: The pick to be updated
    *        schema: 
    *          allOf: 
-   *           - $ref: '#/definitions/Game'
+   *           - $ref: '#/definitions/Pick'
    *     responses:
    *       200:
-   *         description: updated Game
+   *         description: updated Pick
    *         schema:
    *           type: object
    *           properties:
    *             status:
    *               type: string
    *             data: 
-   *               $ref: '#/definitions/Game'
+   *               $ref: '#/definitions/Pick'
    *       404: 
    *         $ref: '#/responses/NotFound'
    */
@@ -203,17 +195,17 @@ router.put(`${BASE_URL}/:id`, async (ctx) => {
   try {
     const id = ctx.params.id
     let req = ctx.request.body
-    const games = await queries.updateGame(id, req)
-    if (games.length > 0) {
+    const pick = await queries.updatePick(id, req)
+    if (pick.length > 0) {
       ctx.body = {
         status: 'success',
-        data: games[0]
+        data: pick[0]
       }
     } else {
       ctx.status = 404
       ctx.body = {
         status: 'error',
-        message: `GameID: ${id} not found`
+        message: `PickID: ${id} not found`
       }
     }
   } catch (err) {
@@ -228,47 +220,47 @@ router.put(`${BASE_URL}/:id`, async (ctx) => {
 
 /**
    * @swagger
-   * /games/{gameId}:
+   * /picks/{pickId}:
    *   delete:
-   *     summary: Delete single game
+   *     summary: Delete single pick
    *     tags:
-   *      - Games
+   *      - Picks
    *     produces:
    *      - application/json
    *     parameters: 
    *      - in: path
-   *        name: gameId
+   *        name: pickId
    *        schema: 
    *          type: integer
    *          required: true
-   *          description: Id of game to delete
+   *          description: Id of pick to delete
    *     responses:
    *       200:
-   *         description: Single Game
+   *         description: Single Pick
    *         schema:
    *           type: object
    *           properties:
    *             status:
    *               type: string
    *             data: 
-   *               $ref: '#/definitions/Game'
+   *               $ref: '#/definitions/Pick'
    *       404: 
    *         $ref: '#/responses/NotFound'
    */
 router.delete(`${BASE_URL}/:id`, async (ctx) => {
   try {
     const id = ctx.params.id
-    const games = await queries.deleteGameById(id)
-    if (games.length > 0) {
+    const pick = await queries.deletePickById(id)
+    if (pick.length > 0) {
       ctx.body = {
         status: 'success',
-        data: games[0]
+        data: pick[0]
       }
     } else {
       ctx.status = 404
       ctx.body = {
         status: 'error',
-        message: `GameID: ${id} not found`
+        message: `PickID: ${id} not found`
       }
     }
   } catch (err) {
@@ -283,11 +275,11 @@ router.delete(`${BASE_URL}/:id`, async (ctx) => {
 
 /**
    * @swagger
-   * /games/weeks/{weekId}:
+   * /picks/weeks/{weekId}:
    *   get:
-   *     summary: Fetch all games for week
+   *     summary: Fetch all picks for week
    *     tags:
-   *      - Games
+   *      - Picks
    *     produces:
    *      - application/json
    *     parameters: 
@@ -296,10 +288,10 @@ router.delete(`${BASE_URL}/:id`, async (ctx) => {
    *        schema: 
    *          type: integer
    *          required: true
-   *          description: Id of week to fetch games for
+   *          description: Id of week to fetch picks for
    *     responses:
    *       200:
-   *         description: List of Games
+   *         description: List of Picks
    *         schema:
    *           type: object
    *           properties:
@@ -309,30 +301,18 @@ router.delete(`${BASE_URL}/:id`, async (ctx) => {
    *               type: array
    *               items:
    *                 allOf:
-   *                  - $ref: '#/definitions/Game'
-   *                 properties:
-   *                   home: 
-   *                     type: object
-   *                     $ref: '#/definitions/Team'
-   *                   away: 
-   *                     type: object
-   *                     $ref: '#/definitions/Team'
+   *                  - $ref: '#/definitions/Pick'
    *       404: 
    *         $ref: '#/responses/NotFound'
    */
   router.get(`${BASE_URL}/weeks/:id`, async (ctx) => {
     try {
       const id = ctx.params.id
-      const games = await queries.getGamesByWeek(id)
-      if (games.length > 0) {
-        const mappedGames = await Promise.all(games.map(async game => {
-          let home = await teamQueries.getTeamById(game.home_id)
-          let away = await teamQueries.getTeamById(game.away_id)
-          return {...game, home, away}
-        }))        
+      const picks = await queries.getPicksByWeek(id)
+      if (picks.length > 0) {     
         ctx.body = {
           status: 'success',  
-          data: mappedGames
+          data: picks
         }
       } else {
         ctx.status = 404

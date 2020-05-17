@@ -52,8 +52,32 @@ router.get('/ping', async (ctx) => {
  *          type: string
  *          format: date-time
  *       season_week:
+ *          type: string
+ *          example: 20-5
+ *   Pick:
+ *     type: object
+ *     properties:
+ *       id: 
+ *         type: integer
+ *         example: 1
+ *       league_id:
+ *         type: integer
+ *         example: 1
+ *       user_id:
+ *         type: integer
+ *         example: 1
+ *       game_id: 
  *          type: integer
- *          example: 5
+ *          example: 1
+ *       team_id: 
+ *          type: integer
+ *          example: 12
+ *       home_score:
+ *          type: integer
+ *          example: 24
+ *       away_score:
+ *          type: integer
+ *          example: 10
  *   League:
  *     type: object
  *     properties:
