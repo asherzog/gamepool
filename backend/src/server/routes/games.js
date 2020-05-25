@@ -141,11 +141,9 @@ router.get(`${BASE_URL}/:id`, async (ctx) => {
     const id = ctx.params.id
     const games = await queries.getGameById(id)
     if (games.length > 0) {
-      const home = await teamQueries.getTeamById(games[0].home_id)
-      const away = await teamQueries.getTeamById(games[0].away_id)
       ctx.body = {
         status: 'success',
-        data: {...games[0], home, away}
+        data: games[0]
       }
     } else {
       ctx.status = 404

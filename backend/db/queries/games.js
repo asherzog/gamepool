@@ -1,5 +1,6 @@
 const knex = require('../connection')
 const tableNames = require('../../src/constants/tableNames')
+const teamQueries = require('./teams')
 
 function createGame(game) {
   return knex(tableNames.game)
@@ -14,11 +15,17 @@ function getAllGames() {
     .whereNull('deleted_at')
 }
 
-function getGameById(id) {
-  return knex
+async function getGameById(id) {
+  let home, away
+  const game = await knex
     .select('*')
     .from(tableNames.game)
     .where({ id: parseInt(id) })
+    if (game.length) {
+      home = await teamQueries.getTeamById(game[0].home_id)
+      away = await teamQueries.getTeamById(game[0].away_id)
+    }
+    return [{...game[0], home: home[0], away: away[0]}]
 }
 
 function getGamesByWeek(id) {
