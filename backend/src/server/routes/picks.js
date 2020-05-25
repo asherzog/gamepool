@@ -1,6 +1,7 @@
 const Router = require('koa-router')
 const queries = require('../../../db/queries/picks')
 const teamQueries = require('../../../db/queries/teams')
+const gameQueries = require('../../../db/queries/games')
 
 const router = new Router()
 const BASE_URL = `/api/v1/picks`
@@ -135,9 +136,10 @@ router.get(`${BASE_URL}/:id`, async (ctx) => {
     const pick = await queries.getPickById(id)
     if (pick.length > 0) {
       const winner = await teamQueries.getTeamById(pick[0].team_id)
+      const game = await gameQueries.getGameById(pick[0].game_id)
       ctx.body = {
         status: 'success',
-        data: {...pick[0], winner}
+        data: {...pick[0], winner: winner[0], game: game[0]}
       }
     } else {
       ctx.status = 404
@@ -162,7 +164,7 @@ router.get(`${BASE_URL}/:id`, async (ctx) => {
    *   put:
    *     summary: Update single pick
    *     tags:
-   *      - Games
+   *      - Picks
    *     produces:
    *      - application/json
    *     parameters: 
@@ -283,6 +285,16 @@ router.delete(`${BASE_URL}/:id`, async (ctx) => {
    *     produces:
    *      - application/json
    *     parameters: 
+   *      - in: header
+   *        name: X-League-ID
+   *        description: league id to get picks for
+   *        required: true
+   *        type: string
+   *      - in: header
+   *        name: X-User-ID
+   *        description: user id to get picks for
+   *        required: false
+   *        type: string
    *      - in: path
    *        name: weekId
    *        schema: 
@@ -307,19 +319,13 @@ router.delete(`${BASE_URL}/:id`, async (ctx) => {
    */
   router.get(`${BASE_URL}/weeks/:id`, async (ctx) => {
     try {
-      const id = ctx.params.id
-      const picks = await queries.getPicksByWeek(id)
-      if (picks.length > 0) {     
-        ctx.body = {
-          status: 'success',  
-          data: picks
-        }
-      } else {
-        ctx.status = 404
-        ctx.body = {
-          status: 'error',
-          message: `WeekID: ${id} not found`
-        }
+      const weekId = ctx.params.id
+      const leagueId = ctx.headers['x-league-id']
+      const userId = ctx.headers['x-user-id']
+      const picks = await queries.getPicksByWeek(leagueId, weekId, userId)   
+      ctx.body = {
+        status: 'success',  
+        data: picks
       }
     } catch (err) {
       console.log(err)
