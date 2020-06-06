@@ -7,6 +7,7 @@ getAllUsers:
       - common/inex.js
       - common/node_modules/**
       - db/queries/users.js
+      - db/queries/leagues.js
       - db/connection.js
   events: 
   - http: GET users
@@ -20,11 +21,66 @@ getSingleUser:
       - common/inex.js
       - common/node_modules/**
       - db/queries/users.js
+      - db/queries/leagues.js
       - db/connection.js
   events: 
   - http:
       path: users/{id}
       method: get
+      request: 
+        parameters: 
+          paths: 
+            id: true
+
+createUser:
+  handler: users/index.create
+  package:
+    include:
+      - users/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/users.js
+      - db/queries/leagues.js
+      - db/connection.js
+  events: 
+  - http: POST users
+
+updateUser:
+  handler: users/index.update
+  package:
+    include:
+      - users/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/users.js
+      - db/queries/leagues.js
+      - db/connection.js
+  events: 
+  - http:
+      path: users/{id}
+      method: put
+      request: 
+        parameters: 
+          paths: 
+            id: true
+
+deleteUser:
+  handler: users/index.delete
+  package:
+    include:
+      - users/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/users.js
+      - db/queries/leagues.js
+      - db/connection.js
+  events: 
+  - http:
+      path: users/{id}
+      method: delete
       request: 
         parameters: 
           paths: 

@@ -1,4 +1,5 @@
 const queries = require('../db/queries/teams')
+const { handleError } = require('../common')
 
 exports.getAll = async () => {
   try {
@@ -8,13 +9,7 @@ exports.getAll = async () => {
       body: JSON.stringify(result)
     }
   } catch (e) {
-    console.log(e)
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        error: e.message,
-      })
-    }
+    return handleError(e)
   }
 }
 
@@ -28,20 +23,9 @@ exports.getSingle = async (event) => {
         body: JSON.stringify(result[0])
       }
     } else {
-      return {
-        statusCode: 404,
-        body: JSON.stringify({
-          error: `Team: ${id}, not found` 
-        })
-      }
+      return handleError('err: ', 404, `Team: ${id}, not found`)
     }
   } catch (e) {
-    console.log(e)
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        error: e.message,
-      })
-    }
+    return handleError(e)
   }
 }
