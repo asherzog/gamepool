@@ -1,0 +1,20 @@
+service: gamepool
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage}
+  region: us-west-2
+  environment:
+    API_KEY: ${self:custom.env.API_KEY}
+    PG_ID: ${self:custom.env.PG_ID}
+  package: 
+    individually: true
+    exclude: 
+      - "**/*"
+functions:
+  - ${file(teams/teams.yml)}
+  - ${file(users/users.yml)}
+custom:
+  env: ${file(env.yml):${self:provider.stage}}
+plugins:
+  - serverless-offline

@@ -1,0 +1,31 @@
+getAllTeams:
+  handler: teams/index.getAll
+  package:
+    include:
+      - teams/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/teams.js
+      - db/connection.js
+  events: 
+  - http: GET teams
+
+getSingleTeam:
+  handler: teams/index.getSingle
+  package:
+    include:
+      - teams/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/teams.js
+      - db/connection.js
+  events: 
+  - http:
+      path: teams/{id}
+      method: get
+      request: 
+        parameters: 
+          paths: 
+            id: true

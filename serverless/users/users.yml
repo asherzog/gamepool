@@ -1,0 +1,31 @@
+getAllUsers:
+  handler: users/index.getAll
+  package:
+    include:
+      - users/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/users.js
+      - db/connection.js
+  events: 
+  - http: GET users
+
+getSingleUser:
+  handler: users/index.getSingle
+  package:
+    include:
+      - users/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/users.js
+      - db/connection.js
+  events: 
+  - http:
+      path: users/{id}
+      method: get
+      request: 
+        parameters: 
+          paths: 
+            id: true
