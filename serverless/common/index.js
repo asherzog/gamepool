@@ -30,5 +30,14 @@ module.exports = {
     } catch (e) {
       throw e
     }
+  },
+  handleError: (e, status = null, msg = null) => {
+    console.log(e)
+    return {
+      statusCode: status || 500,
+      body: JSON.stringify({
+        error: msg || e.message
+      })
+    }
   }
 }

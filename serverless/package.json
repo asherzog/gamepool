@@ -8,7 +8,7 @@
     "rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
     "deploy": "sls deploy --stage dev",
-    "dev": "sls offline --stage dev"
+    "dev": "nodemon --exec sls offline --stage dev"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,7 @@
     "pg": "^8.2.1"
   },
   "devDependencies": {
+    "nodemon": "^2.0.4",
     "serverless-offline": "^6.4.0"
   }
 }

@@ -13,7 +13,7 @@ const gameRoutes = require('./routes/games')
 const pickRoutes = require('./routes/picks')
 
 const app = new Koa()
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 
 app.use(bodyParser())
 app.use(helmet()) // add OWASP headers
