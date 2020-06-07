@@ -1,0 +1,107 @@
+getAllGames:
+  handler: games/index.getAll
+  package:
+    include:
+      - games/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/games.js
+      - db/queries/teams.js
+      - db/connection.js
+  events: 
+  - http: GET games
+
+getSingleGame:
+  handler: games/index.getSingle
+  package:
+    include:
+      - games/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/games.js
+      - db/queries/teams.js
+      - db/connection.js
+  events: 
+  - http:
+      path: games/{id}
+      method: get
+      request: 
+        parameters: 
+          paths: 
+            id: true
+
+createGame:
+  handler: games/index.create
+  package:
+    include:
+      - games/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/games.js
+      - db/queries/teams.js
+      - db/connection.js
+  events: 
+  - http: POST games
+
+updateGame:
+  handler: games/index.update
+  package:
+    include:
+      - games/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/games.js
+      - db/queries/teams.js
+      - db/connection.js
+  events: 
+  - http:
+      path: games/{id}
+      method: put
+      request: 
+        parameters: 
+          paths: 
+            id: true
+
+deleteGame:
+  handler: games/index.delete
+  package:
+    include:
+      - games/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/games.js
+      - db/queries/teams.js
+      - db/connection.js
+  events: 
+  - http:
+      path: games/{id}
+      method: delete
+      request: 
+        parameters: 
+          paths: 
+            id: true
+
+getAllGamesByWeek:
+  handler: games/index.getAllForWeek
+  package:
+    include:
+      - games/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/games.js
+      - db/queries/teams.js
+      - db/connection.js
+  events: 
+  - http:
+      path: games/weeks/{id}
+      method: get
+      request: 
+        parameters: 
+          paths: 
+            id: true
