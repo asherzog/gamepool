@@ -1,0 +1,168 @@
+getAllLeagues:
+  handler: leagues/index.getAll
+  package:
+    include:
+      - leagues/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/leagues.js
+      - db/queries/leagueUsers.js
+      - db/connection.js
+  events: 
+  - http: GET leagues
+
+getSingleLeague:
+  handler: leagues/index.getSingle
+  package:
+    include:
+      - leagues/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/leagues.js
+      - db/queries/leagueUsers.js
+      - db/connection.js
+  events: 
+  - http:
+      path: leagues/{id}
+      method: get
+      request: 
+        parameters: 
+          paths: 
+            id: true
+
+createLeague:
+  handler: leagues/index.create
+  package:
+    include:
+      - leagues/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/leagues.js
+      - db/queries/leagueUsers.js
+      - db/connection.js
+  events: 
+  - http: POST leagues
+
+updateLeague:
+  handler: leagues/index.update
+  package:
+    include:
+      - leagues/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/leagues.js
+      - db/queries/leagueUsers.js
+      - db/connection.js
+  events: 
+  - http:
+      path: leagues/{id}
+      method: put
+      request: 
+        parameters: 
+          paths: 
+            id: true
+
+deleteLeagues:
+  handler: leagues/index.delete
+  package:
+    include:
+      - leagues/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/leagues.js
+      - db/queries/leagueUsers.js
+      - db/connection.js
+  events: 
+  - http:
+      path: leagues/{id}
+      method: delete
+      request: 
+        parameters: 
+          paths: 
+            id: true
+
+getAllLeagueUsers:
+  handler: leagues/index.getAllUsers
+  package:
+    include:
+      - leagues/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/leagues.js
+      - db/queries/leagueUsers.js
+      - db/connection.js
+  events: 
+  - http:
+      path: leagues/{id}/users
+      method: get
+      request: 
+        parameters: 
+          paths: 
+            id: true
+
+creataeLeagueUsers:
+  handler: leagues/index.createUser
+  package:
+    include:
+      - leagues/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/leagues.js
+      - db/queries/leagueUsers.js
+      - db/connection.js
+  events: 
+  - http:
+      path: leagues/{id}/users
+      method: post
+      request: 
+        parameters: 
+          paths: 
+            id: true
+
+deleteLeagueUsers:
+  handler: leagues/index.deleteUser
+  package:
+    include:
+      - leagues/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/leagues.js
+      - db/queries/leagueUsers.js
+      - db/connection.js
+  events: 
+  - http:
+      path: leagues/{id}/users/{uid}
+      method: delete
+      request: 
+        parameters: 
+          paths: 
+            id: true
+            uid: true
+
+getAllLeaguesForUser:
+  handler: leagues/index.getAllForUser
+  package:
+    include:
+      - leagues/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/leagues.js
+      - db/queries/leagueUsers.js
+      - db/connection.js
+  events: 
+  - http:
+      path: leagues/users/{id}
+      method: get
+      request: 
+        parameters: 
+          paths: 
+            id: true

@@ -1,0 +1,113 @@
+getAllPicks:
+  handler: picks/index.getAll
+  package:
+    include:
+      - picks/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/picks.js
+      - db/queries/teams.js
+      - db/queries/games.js
+      - db/connection.js
+  events: 
+  - http: GET picks
+
+getSinglePick:
+  handler: picks/index.getSingle
+  package:
+    include:
+      - picks/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/picks.js
+      - db/queries/teams.js
+      - db/queries/games.js
+      - db/connection.js
+  events: 
+  - http:
+      path: picks/{id}
+      method: get
+      request: 
+        parameters: 
+          paths: 
+            id: true
+
+createPick:
+  handler: picks/index.create
+  package:
+    include:
+      - picks/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/picks.js
+      - db/queries/teams.js
+      - db/queries/games.js
+      - db/connection.js
+  events: 
+  - http: POST picks
+
+updatePick:
+  handler: picks/index.update
+  package:
+    include:
+      - picks/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/picks.js
+      - db/queries/teams.js
+      - db/queries/games.js
+      - db/connection.js
+  events: 
+  - http:
+      path: picks/{id}
+      method: put
+      request: 
+        parameters: 
+          paths: 
+            id: true
+
+deletePick:
+  handler: picks/index.delete
+  package:
+    include:
+      - picks/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/picks.js
+      - db/queries/teams.js
+      - db/queries/games.js
+      - db/connection.js
+  events: 
+  - http:
+      path: picks/{id}
+      method: delete
+      request: 
+        parameters: 
+          paths: 
+            id: true
+
+getPicksByWeek:
+  handler: picks/index.getAllForWeek
+  package:
+    include:
+      - picks/index.js
+      - knexfile.js
+      - common/inex.js
+      - common/node_modules/**
+      - db/queries/picks.js
+      - db/queries/teams.js
+      - db/queries/games.js
+      - db/connection.js
+  events: 
+  - http:
+      path: picks/weeks/{id}
+      method: get
+      request: 
+        parameters: 
+          paths: 
+            id: true
