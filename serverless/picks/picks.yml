@@ -4,7 +4,7 @@ getAllPicks:
     include:
       - picks/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/picks.js
       - db/queries/teams.js
@@ -12,6 +12,7 @@ getAllPicks:
       - db/connection.js
   events: 
   - http: GET picks
+    cors: true
 
 getSinglePick:
   handler: picks/index.getSingle
@@ -19,7 +20,7 @@ getSinglePick:
     include:
       - picks/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/picks.js
       - db/queries/teams.js
@@ -29,6 +30,7 @@ getSinglePick:
   - http:
       path: picks/{id}
       method: get
+      cors: true
       request: 
         parameters: 
           paths: 
@@ -40,7 +42,7 @@ createPick:
     include:
       - picks/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/picks.js
       - db/queries/teams.js
@@ -48,6 +50,7 @@ createPick:
       - db/connection.js
   events: 
   - http: POST picks
+    cors: true
 
 updatePick:
   handler: picks/index.update
@@ -55,7 +58,7 @@ updatePick:
     include:
       - picks/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/picks.js
       - db/queries/teams.js
@@ -65,6 +68,7 @@ updatePick:
   - http:
       path: picks/{id}
       method: put
+      cors: true
       request: 
         parameters: 
           paths: 
@@ -76,7 +80,7 @@ deletePick:
     include:
       - picks/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/picks.js
       - db/queries/teams.js
@@ -86,6 +90,7 @@ deletePick:
   - http:
       path: picks/{id}
       method: delete
+      cors: true
       request: 
         parameters: 
           paths: 
@@ -97,7 +102,7 @@ getPicksByWeek:
     include:
       - picks/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/picks.js
       - db/queries/teams.js
@@ -107,6 +112,7 @@ getPicksByWeek:
   - http:
       path: picks/weeks/{id}
       method: get
+      cors: true
       request: 
         parameters: 
           paths: 

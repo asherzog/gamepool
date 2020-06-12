@@ -4,13 +4,14 @@ getAllLeagues:
     include:
       - leagues/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/leagues.js
       - db/queries/leagueUsers.js
       - db/connection.js
   events: 
   - http: GET leagues
+    cors: true
 
 getSingleLeague:
   handler: leagues/index.getSingle
@@ -18,7 +19,7 @@ getSingleLeague:
     include:
       - leagues/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/leagues.js
       - db/queries/leagueUsers.js
@@ -27,6 +28,7 @@ getSingleLeague:
   - http:
       path: leagues/{id}
       method: get
+      cors: true
       request: 
         parameters: 
           paths: 
@@ -38,13 +40,14 @@ createLeague:
     include:
       - leagues/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/leagues.js
       - db/queries/leagueUsers.js
       - db/connection.js
   events: 
   - http: POST leagues
+    cors: true
 
 updateLeague:
   handler: leagues/index.update
@@ -52,7 +55,7 @@ updateLeague:
     include:
       - leagues/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/leagues.js
       - db/queries/leagueUsers.js
@@ -61,6 +64,7 @@ updateLeague:
   - http:
       path: leagues/{id}
       method: put
+      cors: true
       request: 
         parameters: 
           paths: 
@@ -72,7 +76,7 @@ deleteLeagues:
     include:
       - leagues/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/leagues.js
       - db/queries/leagueUsers.js
@@ -81,6 +85,7 @@ deleteLeagues:
   - http:
       path: leagues/{id}
       method: delete
+      cors: true
       request: 
         parameters: 
           paths: 
@@ -92,7 +97,7 @@ getAllLeagueUsers:
     include:
       - leagues/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/leagues.js
       - db/queries/leagueUsers.js
@@ -101,6 +106,7 @@ getAllLeagueUsers:
   - http:
       path: leagues/{id}/users
       method: get
+      cors: true
       request: 
         parameters: 
           paths: 
@@ -112,7 +118,7 @@ creataeLeagueUsers:
     include:
       - leagues/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/leagues.js
       - db/queries/leagueUsers.js
@@ -121,6 +127,7 @@ creataeLeagueUsers:
   - http:
       path: leagues/{id}/users
       method: post
+      cors: true
       request: 
         parameters: 
           paths: 
@@ -132,7 +139,7 @@ deleteLeagueUsers:
     include:
       - leagues/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/leagues.js
       - db/queries/leagueUsers.js
@@ -141,6 +148,7 @@ deleteLeagueUsers:
   - http:
       path: leagues/{id}/users/{uid}
       method: delete
+      cors: true
       request: 
         parameters: 
           paths: 
@@ -153,7 +161,7 @@ getAllLeaguesForUser:
     include:
       - leagues/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/leagues.js
       - db/queries/leagueUsers.js
@@ -162,6 +170,7 @@ getAllLeaguesForUser:
   - http:
       path: leagues/users/{id}
       method: get
+      cors: true
       request: 
         parameters: 
           paths: 

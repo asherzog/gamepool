@@ -4,13 +4,14 @@ getAllUsers:
     include:
       - users/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/users.js
       - db/queries/leagues.js
       - db/connection.js
   events: 
   - http: GET users
+    cors: true
 
 getSingleUser:
   handler: users/index.getSingle
@@ -18,7 +19,7 @@ getSingleUser:
     include:
       - users/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/users.js
       - db/queries/leagues.js
@@ -27,6 +28,7 @@ getSingleUser:
   - http:
       path: users/{id}
       method: get
+      cors: true
       request: 
         parameters: 
           paths: 
@@ -38,13 +40,14 @@ createUser:
     include:
       - users/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/users.js
       - db/queries/leagues.js
       - db/connection.js
   events: 
   - http: POST users
+    cors: true
 
 updateUser:
   handler: users/index.update
@@ -52,7 +55,7 @@ updateUser:
     include:
       - users/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/users.js
       - db/queries/leagues.js
@@ -61,6 +64,7 @@ updateUser:
   - http:
       path: users/{id}
       method: put
+      cors: true
       request: 
         parameters: 
           paths: 
@@ -72,7 +76,7 @@ deleteUser:
     include:
       - users/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/users.js
       - db/queries/leagues.js
@@ -81,6 +85,7 @@ deleteUser:
   - http:
       path: users/{id}
       method: delete
+      cors: true
       request: 
         parameters: 
           paths: 

@@ -17,6 +17,7 @@ functions:
   - ${file(leagues/leagues.yml)}
   - ${file(games/games.yml)}
   - ${file(picks/picks.yml)}
+  - ${file(auth/auth.yml)}
 custom:
   env: ${file(env.yml):${self:provider.stage}}
 plugins:

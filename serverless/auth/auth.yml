@@ -1,0 +1,27 @@
+login:
+  handler: auth/index.login
+  package:
+    include:
+      - auth/index.js
+      - knexfile.js
+      - common/index.js
+      - common/node_modules/**
+      - db/queries/users.js
+      - db/connection.js
+  events: 
+  - http: POST auth/login
+    cors: true
+
+register:
+  handler: auth/index.register
+  package:
+    include:
+      - auth/index.js
+      - knexfile.js
+      - common/index.js
+      - common/node_modules/**
+      - db/queries/users.js
+      - db/connection.js
+  events: 
+  - http: POST auth/register
+    cors: true
