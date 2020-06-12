@@ -33,6 +33,13 @@ function getUserById(id) {
     .where({ id: parseInt(id) })
 }
 
+function getUserByEmail(email) {
+  return knex
+    .select('id', 'name', 'email', 'last_login', 'password')
+    .from(tableNames.user)
+    .where({ email })
+}
+
 function updateUser(id, user) {
   return knex(tableNames.user)
     .update(user)
@@ -46,5 +53,6 @@ module.exports = {
   deleteUser,
   getAllUsers,
   getUserById,
+  getUserByEmail,
   updateUser
 }

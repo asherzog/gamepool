@@ -4,13 +4,14 @@ getAllGames:
     include:
       - games/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/games.js
       - db/queries/teams.js
       - db/connection.js
   events: 
   - http: GET games
+    cors: true
 
 getSingleGame:
   handler: games/index.getSingle
@@ -18,7 +19,7 @@ getSingleGame:
     include:
       - games/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/games.js
       - db/queries/teams.js
@@ -27,6 +28,7 @@ getSingleGame:
   - http:
       path: games/{id}
       method: get
+      cors: true
       request: 
         parameters: 
           paths: 
@@ -38,13 +40,14 @@ createGame:
     include:
       - games/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/games.js
       - db/queries/teams.js
       - db/connection.js
   events: 
   - http: POST games
+    cors: true
 
 updateGame:
   handler: games/index.update
@@ -52,7 +55,7 @@ updateGame:
     include:
       - games/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/games.js
       - db/queries/teams.js
@@ -61,6 +64,7 @@ updateGame:
   - http:
       path: games/{id}
       method: put
+      cors: true
       request: 
         parameters: 
           paths: 
@@ -72,7 +76,7 @@ deleteGame:
     include:
       - games/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/games.js
       - db/queries/teams.js
@@ -81,6 +85,7 @@ deleteGame:
   - http:
       path: games/{id}
       method: delete
+      cors: true
       request: 
         parameters: 
           paths: 
@@ -92,7 +97,7 @@ getAllGamesByWeek:
     include:
       - games/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/games.js
       - db/queries/teams.js
@@ -101,6 +106,7 @@ getAllGamesByWeek:
   - http:
       path: games/weeks/{id}
       method: get
+      cors: true
       request: 
         parameters: 
           paths: 
