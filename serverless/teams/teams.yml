@@ -4,12 +4,13 @@ getAllTeams:
     include:
       - teams/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/teams.js
       - db/connection.js
   events: 
   - http: GET teams
+    cors: true
 
 getSingleTeam:
   handler: teams/index.getSingle
@@ -17,7 +18,7 @@ getSingleTeam:
     include:
       - teams/index.js
       - knexfile.js
-      - common/inex.js
+      - common/index.js
       - common/node_modules/**
       - db/queries/teams.js
       - db/connection.js
@@ -25,6 +26,7 @@ getSingleTeam:
   - http:
       path: teams/{id}
       method: get
+      cors: true
       request: 
         parameters: 
           paths: 
