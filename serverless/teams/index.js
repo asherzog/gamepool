@@ -1,11 +1,12 @@
 const queries = require('../db/queries/teams')
-const { handleError } = require('../common')
+const { defaultHeaders, handleError } = require('../common')
 
 exports.getAll = async () => {
   try {
     const result = await queries.getAllTeams()
     return {
       statusCode: 200,
+      headers: {...defaultHeaders},
       body: JSON.stringify(result)
     }
   } catch (e) {
@@ -20,6 +21,7 @@ exports.getSingle = async (event) => {
     if (result.length) {
       return {
         statusCode: 200,
+        headers: {...defaultHeaders},
         body: JSON.stringify(result[0])
       }
     } else {

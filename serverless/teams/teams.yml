@@ -9,8 +9,15 @@ getAllTeams:
       - db/queries/teams.js
       - db/connection.js
   events: 
-  - http: GET teams
-    cors: true
+  - http:
+      path: teams
+      method: get
+      cors: true
+      authorizer:
+        type: TOKEN
+        name: verify-token
+        resultTtlInSeconds: 3600
+        identitySource: method.request.header.Authorization
 
 getSingleTeam:
   handler: teams/index.getSingle
@@ -31,3 +38,7 @@ getSingleTeam:
         parameters: 
           paths: 
             id: true
+      authorizer:
+        name: verify-token
+        resultTtlInSeconds: 3600
+        identitySource: method.request.header.Authorization
