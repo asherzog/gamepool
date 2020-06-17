@@ -1,14 +1,15 @@
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
+const cookie = require('cookie')
 const userQueries = require('../db/queries/users')
-const { handleError } = require('../common')
+const { defaultHeaders, handleError } = require('../common')
 
 async function login(req) {
   const user = await userQueries.getUserByEmail(req.email)
   if (user.length) {
     const valid = await bcrypt.compare(req.password, user[0].password)
     if (valid) {
-      return signToken(user[0].id)
+      return { id: user[0].id, token: signToken(user[0].id) }
     }
   }
   return null
@@ -20,12 +21,21 @@ function signToken(id) {
   })
 }
 
+function setCookie(jwt) {
+  return cookie.serialize('gid', jwt, {
+    // httpOnly: true,
+    maxAge: 60 * 60 * 24 * 7, // 1 week
+    path: '/'
+  })
+}
+
 exports.login = async (event) => {
   try {
     const result = await login(JSON.parse(event.body))
     if (result) {
       return {
         statusCode: 200,
+        headers: {...defaultHeaders, 'Set-Cookie': setCookie(result.token) },
         body: JSON.stringify(result)
       }
     }
@@ -48,9 +58,11 @@ exports.register = async (event) => {
   
     const result = await userQueries.createUser(postObj)
     if (result.length) {
+      const jwt = signToken(result[0].id)
       return {
         statusCode: 201,
-        body: JSON.stringify(signToken(result[0].id))
+        headers: {...defaultHeaders, 'Set-Cookie': setCookie(jwt) },
+        body: JSON.stringify({id: result[0].id, token: jwt })
       }
     } else {
       return handleError('err: ', 400, 'Unable to register user')

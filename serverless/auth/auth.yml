@@ -9,8 +9,21 @@ login:
       - db/queries/users.js
       - db/connection.js
   events: 
-  - http: POST auth/login
-    cors: true
+  - http:
+      path: auth/login
+      method: POST 
+      cors:
+        origin: 'http://localhost:3001'
+        headers:
+          - Content-Type
+          - X-Amz-Date
+          - Authorization
+          - X-Api-Key
+          - X-Amz-Security-Token
+          - X-Amz-User-Agent
+          - Set-Cookie
+        allowCredentials: true
+
 
 register:
   handler: auth/index.register
@@ -23,5 +36,14 @@ register:
       - db/queries/users.js
       - db/connection.js
   events: 
-  - http: POST auth/register
-    cors: true
+  - http:
+      method: POST
+      path: auth/register
+      cors: true
+
+verify-token:
+  handler: auth/verify.auth
+  package:
+    include:
+      - auth/verify.js
+      - common/node_modules/**

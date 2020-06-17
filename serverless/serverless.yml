@@ -11,6 +11,17 @@ provider:
     individually: true
     exclude: 
       - "**/*"
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'http://localhost:3001'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
 functions:
   - ${file(teams/teams.yml)}
   - ${file(users/users.yml)}

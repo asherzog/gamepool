@@ -39,5 +39,11 @@ module.exports = {
         error: msg || e.message
       })
     }
+  },
+  defaultHeaders: {
+    "Access-Control-Allow-Headers" : "Content-Type",
+    "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT, DELETE",
+    'Access-Control-Allow-Origin': 'http://localhost:3001',
+    'Access-Control-Allow-Credentials': true,
   }
 }
