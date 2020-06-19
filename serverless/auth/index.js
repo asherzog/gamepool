@@ -9,7 +9,14 @@ async function login(req) {
   if (user.length) {
     const valid = await bcrypt.compare(req.password, user[0].password)
     if (valid) {
-      return { id: user[0].id, token: signToken(user[0].id) }
+      const { id, email, firstName, lastName, last_login } = user[0]
+      return { 
+        id,
+        email,
+        firstName,
+        lastName,
+        lastLogin: last_login,
+        token: signToken(user[0].id) }
     }
   }
   return null
@@ -24,7 +31,7 @@ function signToken(id) {
 function setCookie(jwt) {
   return cookie.serialize('gid', jwt, {
     // httpOnly: true,
-    maxAge: 60 * 60 * 24 * 7, // 1 week
+    maxAge: 86400,
     path: '/'
   })
 }
@@ -39,7 +46,7 @@ exports.login = async (event) => {
         body: JSON.stringify(result)
       }
     }
-    return handleError('err: ', 401, `User not authenticated` )
+    return handleError('err: ', 401, `Incorrect email or password` )
   } catch (e) {
     return handleError(e)
   }
@@ -51,18 +58,27 @@ exports.register = async (event) => {
     // TODO: Validate request 
     let req = JSON.parse(event.body)
     let postObj = {
-      name: req.name,
+      firstName: req.firstName,
+      lastName: req.lastName,
       email: req.email,
       password: await bcrypt.hash(req.password, 12)
     }
   
     const result = await userQueries.createUser(postObj)
     if (result.length) {
-      const jwt = signToken(result[0].id)
+      const token = signToken(result[0].id)
+      const { id, email, firstName, lastName, last_login } = result[0]
       return {
         statusCode: 201,
-        headers: {...defaultHeaders, 'Set-Cookie': setCookie(jwt) },
-        body: JSON.stringify({id: result[0].id, token: jwt })
+        headers: {...defaultHeaders, 'Set-Cookie': setCookie(token) },
+        body: JSON.stringify({ 
+          id, 
+          email, 
+          firstName, 
+          lastName,
+          token, 
+          lastLogin: last_login 
+        })
       }
     } else {
       return handleError('err: ', 400, 'Unable to register user')
@@ -70,5 +86,24 @@ exports.register = async (event) => {
   } catch (e) {
     console.log(e)
     return handleError(e, 400, 'Username taken')
+  }
+}
+
+exports.me = async (event) => {
+  try {
+    // TODO: Validate request 
+    const id = event.requestContext.authorizer.principalId
+    const result = await userQueries.getUserById(id)
+    if (result.length) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify(result[0])
+      }
+    } else {
+      return handleError('err: ', 400, 'Unauthorized')
+    }
+  } catch (e) {
+    console.log(e)
+    return handleError(e, 400, 'Unauthorized')
   }
 }

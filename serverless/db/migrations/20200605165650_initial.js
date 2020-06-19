@@ -19,7 +19,8 @@ exports.up = async (knex) => {
     knex.schema.createTable(tableNames.user, (table) => {
       table.increments().notNullable()
       table.string('email', 254).notNullable().unique()
-      table.string('name', 50).notNullable()
+      table.string('firstName', 50).notNullable()
+      table.string('lastName', 50).notNullable()
       table.string('password', 127).notNullable()
       table.dateTime('last_login')
       addDefaultColumns(table)
