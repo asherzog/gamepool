@@ -7,19 +7,29 @@ import './App.css'
 import Container from '@material-ui/core/Container'
 import { connect, useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
-import { getLoggedInUser } from './features/auth/authSlice'
+import { getLoggedInUser, logout } from './features/auth/authSlice'
 import { Button } from '@material-ui/core'
 
-const mapDispatch = { getLoggedInUser }
+const mapDispatch = { getLoggedInUser, logout }
 
 const Home = () => {
+  const user = useSelector(state => state.auth.user)
   const dispatch = useDispatch()
   const req = () => {
     dispatch(getLoggedInUser())
   }
-
+  const logoutUser = () => {
+    return dispatch(logout())
+  }
   return (
     <Container maxWidth="sm" className="App">
+      <Button  
+        fullWidth
+        aria-label="login" 
+        color="primary" 
+        onClick={() => logoutUser()}>
+        logout
+      </Button>
       <img src={logo} className="App-logo" alt="logo" />
       <Button  
         fullWidth
@@ -29,6 +39,7 @@ const Home = () => {
         onClick={() => req()}>
         Fetch
       </Button>
+      <div><pre>{JSON.stringify(user, undefined, 2)}</pre></div>
     </Container>
   )
 }
@@ -45,13 +56,15 @@ function App() {
   }
 
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <WithAuth>
-        <Route path="/" element={<Home />} />
-      </WithAuth>
-    </Routes>
+    <section>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <WithAuth>
+          <Route path="/" element={<Home />} />
+        </WithAuth>
+      </Routes>
+    </section>
 )}
 
 connect(null, mapDispatch)(Home)

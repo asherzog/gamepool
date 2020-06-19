@@ -11,12 +11,8 @@ async function login(req) {
     if (valid) {
       const { id, email, firstName, lastName, last_login } = user[0]
       return { 
-        id,
-        email,
-        firstName,
-        lastName,
-        lastLogin: last_login,
-        token: signToken(user[0].id) }
+        user: { id, email, firstName, lastName, lastLogin: last_login },
+        token: signToken(id) }
     }
   }
   return null
@@ -66,18 +62,14 @@ exports.register = async (event) => {
   
     const result = await userQueries.createUser(postObj)
     if (result.length) {
-      const token = signToken(result[0].id)
       const { id, email, firstName, lastName, last_login } = result[0]
+      const token = signToken(id)
       return {
         statusCode: 201,
         headers: {...defaultHeaders, 'Set-Cookie': setCookie(token) },
         body: JSON.stringify({ 
-          id, 
-          email, 
-          firstName, 
-          lastName,
-          token, 
-          lastLogin: last_login 
+          user: { id, email, firstName, lastName, lastLogin: last_login },
+          token
         })
       }
     } else {
@@ -91,7 +83,6 @@ exports.register = async (event) => {
 
 exports.me = async (event) => {
   try {
-    // TODO: Validate request 
     const id = event.requestContext.authorizer.principalId
     const result = await userQueries.getUserById(id)
     if (result.length) {
