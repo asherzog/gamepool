@@ -9,6 +9,21 @@ const authApi = {
       withCredentials: true,
       data
     })
+  },
+  async register(data) {
+    return await axios({
+      url: `${API_URL}/auth/register`,
+      method: 'post',
+      withCredentials: true,
+      data
+    })
+  },
+  async getLoggedInUser() {
+    return await axios({
+      url: `${API_URL}/auth/me`,
+      method: 'get',
+      withCredentials: true
+    })
   }
 }
 

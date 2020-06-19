@@ -29,7 +29,8 @@ exports.seed = async (knex) => {
   const password = crypto.randomBytes(15).toString('hex')
   const user = {
     email: 'andy@null.computer',
-    name: 'Andy',
+    firstName: 'Andy',
+    lastName: 'dev',
     password : await bcrypt.hash(password, 12)
   }
   const [createdUser] = await knex(tableNames.user).insert(user).returning('*')

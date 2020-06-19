@@ -1,5 +1,6 @@
 const axios = require('axios')
 const parsePgConnStr = require('pg-connection-string').parse
+require('dotenv').config()
 
 module.exports = {
   getPgConfig: async () => {
@@ -28,6 +29,7 @@ module.exports = {
       }
       return pgConfig
     } catch (e) {
+      console.log(e)
       throw e
     }
   },
