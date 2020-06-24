@@ -4,7 +4,7 @@ const tableNames = require('../../common/tableNames')
 function createLeague(league) {
   return knex(tableNames.league)
     .insert(league)
-    .returning(['id', 'name', 'scoring', 'seasonFee', 'weekFee', 'created_at'])
+    .returning(['id', 'name', 'scoring', 'seasonFee', 'weekFee', 'created_at', 'updated_at', 'deleted_at'])
 }
 
 function deleteLeague(id) {
