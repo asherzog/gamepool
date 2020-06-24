@@ -66,7 +66,7 @@ exports.create = async (event) => {
     const league = await queries.createLeague(postObj)
     if (league.length) {
       let league_id =  league[0].id
-      let hashedId = Buffer.from(`lid=${league.id}`).toString('base64')
+      let hashedId = Buffer.from(`lid=${league[0].id}`).toString('base64')
       await leagueUserQueries.createLeagueUser({
         user_id,
         league_id,
@@ -74,8 +74,17 @@ exports.create = async (event) => {
         is_creator: true
       })
       const users = await leagueUserQueries.getAllLeagueUsers(league_id)
-      let res = {id: hashedId, ...league[0]}
-      console.log(res)
+      let res = {
+        id: hashedId,
+        name: league[0].name,
+        scoring: league[0].scoring, 
+        seasonFee: league[0].seasonFee,
+        weekFee: league[0].weekFee,
+        updatedAt: league[0].updated_at,
+        createdAt: league[0].created_at,
+        deletedAt: league[0].deleted_at,
+        users 
+      }
       return {
         statusCode: 201,
         body: JSON.stringify({...res, users})
