@@ -7,7 +7,7 @@ async function createLeagueUser(user) {
   const fetchedUser = await knex
   .select('id', 'league_id', 'user_id', 'is_admin', 'is_creator')
   .from(tableNames.user_league)
-  .where({ user_id, league_id })  
+  .where({ user_id: parseInt(user_id), league_id: parseInt(league_id) })  
 
   if (fetchedUser.length) return fetchedUser
 
@@ -40,8 +40,9 @@ function deleteAllLeagueUsers(id) {
 function getAllLeagueUsers(id) {
   return knex
     .select(
-      'user.id as user_id',
-      'user.name as user_name', 
+      'user.id as uid',
+      'user.firstName as firstName', 
+      'user.lastName as lastName', 
       'user.email',
       'user_league.is_admin'
     )

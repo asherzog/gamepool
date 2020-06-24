@@ -46,8 +46,15 @@ const setFulfilled = (state, action) => {
 const setRejected = (state, action) => {
   state.loading = false
   if (action.payload) {
-  // If a rejected action has a payload, it means that it was returned with rejectWithValue
-    state.error = action.payload.error
+    if (action.type.includes('auth/me')) {
+      // can't find profile for currently logged in user
+      document.cookie = `gid=;expires=${new Date().toUTCString()};path=/`
+      state.token = null
+      state.error = null
+    } else {
+      // If a rejected action has a payload, it means that it was returned with rejectWithValue
+      state.error = action.payload.error
+    }
   } else {
     state.error = action.error
   }
@@ -79,8 +86,11 @@ export const slice = createSlice({
     [registerUser.fulfilled]: (state, action) => setFulfilled(state, action),
     [registerUser.rejected]: (state, action) => setRejected(state, action),
     [getLoggedInUser.pending]: (state) => setPending(state),
-    [getLoggedInUser.fulfilled]: (state, action) => { state.user = action.payload },
-    [getLoggedInUser.rejected]: (state, action) => setRejected(state, action)
+    [getLoggedInUser.rejected]: (state, action) => setRejected(state, action),
+    [getLoggedInUser.fulfilled]: (state, action) => { 
+      state.user = action.payload
+      state.loading = false
+    }
   }
 })
 

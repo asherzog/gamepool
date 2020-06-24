@@ -28,6 +28,10 @@ exports.up = async (knex) => {
     knex.schema.createTable(tableNames.league, (table) => {
       table.increments().notNullable()
       table.string('name', 50).notNullable()
+      table.string('password', 127).notNullable()
+      table.string('scoring', 50).notNullable()
+      table.integer('seasonFee').notNullable()
+      table.integer('weekFee').notNullable()
       addDefaultColumns(table)
     }),
     knex.schema.createTable(tableNames.team, (table) => {
