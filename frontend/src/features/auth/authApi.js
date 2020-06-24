@@ -1,5 +1,5 @@
+import { API_URL } from '../../utils'
 const axios = require('axios').default
-const API_URL = "http://localhost:3000/dev"
 
 const authApi = {
   async login(data) {

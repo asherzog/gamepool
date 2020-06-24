@@ -6,19 +6,20 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Container from '@material-ui/core/Container'
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
-import InputAdornment from '@material-ui/core/InputAdornment'
 import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import Lock from '@material-ui/icons/Lock'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { connect, useDispatch, useSelector } from 'react-redux'
-import { loginUser } from './authSlice'
+import { joinLeague } from './leaguesSlice'
 
-const mapDispatch = { loginUser }
+const mapDispatch = { joinLeague }
 
 const useStyles = makeStyles(theme => ({
+  form: {
+    marginTop: 40,
+    marginRight: 40
+  },
   divider: {
     margin: '1.25rem 0 0.4rem'
   },
@@ -27,82 +28,61 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function App() {
-  const loading = useSelector(state => state.auth.loading)
-  const authError = useSelector(state => state.auth.error)
+function Join() {
+  const loading = useSelector(state => state.leagues.loading)
+  const authError = useSelector(state => state.leagues.error)
   const { errors, register, handleSubmit } = useForm()
   const dispatch = useDispatch()
   const classes = useStyles()
   const navigate = useNavigate()
-  const location = useLocation()
 
   const onSubmit = async data => {
-    let res = await dispatch(loginUser(data))
+    let res = await dispatch(joinLeague(data))
     if (!res.error) {
-      if (location.state) {
-        let stripped = location.state.pathname.split('/')
-        let loc = (stripped.includes('create') || stripped.includes('join')) ? location.state.pathname : `/${stripped[1]}`
-        navigate(loc)
-      } else {
-        navigate('/')
-      }
+      navigate('/leagues')
     }
   }
-
+  
   return (
     <Container maxWidth="sm">
-      <Paper>
+      <Paper className={classes.form}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={3} direction="column" justify="center" alignItems="center">
             <h1>GamePool</h1>
-            <h3>Sign In</h3>
+            <h3>Join A League</h3>
             <Grid item className={classes.xs8}>
               <TextField
-                  id="email"
-                  inputRef={register({ required: true })}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AccountCircle />
-                      </InputAdornment>
-                    )
-                  }}
-                  label="Email"
-                  fullWidth
-                  name="email"
-                  error={!!errors.email}
-                  helperText={errors.email && 'Required'}
-                />
+                id="id"
+                inputRef={register({ required: true })}
+                label="League Identifier"
+                fullWidth
+                name="id"
+                error={!!errors.id}
+                helperText={errors.id && 'Required'}
+              />
             </Grid>
             <Grid item className={classes.xs8}>
               <TextField
                 id="password"
-                inputRef={register({ required: true })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Lock />
-                    </InputAdornment>
-                  )
-                }}
-                label="Password"
-                fullWidth
                 type="password"
+                inputRef={register({ required: true })}
+                label="League Password"
+                fullWidth
                 name="password"
                 error={!!errors.password || !!authError}
                 helperText={errors.password ? 'Required' : authError ? authError : null}
               />
             </Grid>
             <Grid item xs={12}>
-              <Button disabled={loading} fullWidth type="submit" variant="outlined" aria-label="login" color="primary" >
-                {loading ? <CircularProgress size={24} /> : 'Login'}
+              <Button disabled={loading} fullWidth type="submit" variant="outlined" aria-label="join" color="primary" >
+                {loading ? <CircularProgress size={24} /> : 'Submit'}
               </Button>
             </Grid>
           </Grid>
           <Divider variant="middle" className={classes.divider} />
           <Grid container spacing={3} direction="column" justify="center" alignItems="center">
             <Grid item>
-              <p>New User? <a href="/register">register</a></p>
+              <p>Need a new league? <a href="/leagues/create">create one</a></p>
             </Grid>
           </Grid>
         </form>
@@ -114,4 +94,4 @@ function App() {
 export default connect(
   null,
   mapDispatch
-)(App)
+)(Join)

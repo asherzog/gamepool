@@ -50,7 +50,13 @@ exports.seed = async (knex) => {
   await knex(tableNames.game).insert(game).returning('*')
 
   // create first league
-  const league = {name: "test league"}
+  const league = {
+    name: "test league",
+    password: await bcrypt.hash("testing", 12),
+    scoring: "TIE",
+    seasonFee: 10,
+    weekFee: 0
+  }
   const user_league = {user_id: 1, league_id: 1}
   await knex(tableNames.league).insert(league).returning('*')
   await knex(tableNames.user_league).insert(user_league).returning('*')

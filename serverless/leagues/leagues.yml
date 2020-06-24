@@ -12,6 +12,10 @@ getAllLeagues:
   events: 
   - http: GET leagues
     cors: true
+    authorizer:
+      name: verify-token
+      resultTtlInSeconds: 3600
+      identitySource: method.request.header.Authorization
 
 getSingleLeague:
   handler: leagues/index.getSingle
@@ -33,6 +37,10 @@ getSingleLeague:
         parameters: 
           paths: 
             id: true
+      authorizer:
+        name: verify-token
+        resultTtlInSeconds: 3600
+        identitySource: method.request.header.Authorization
 
 createLeague:
   handler: leagues/index.create
@@ -44,10 +52,16 @@ createLeague:
       - common/node_modules/**
       - db/queries/leagues.js
       - db/queries/leagueUsers.js
-      - db/connection.js
+      - db/connection.js  
   events: 
-  - http: POST leagues
-    cors: true
+  - http: 
+      method: post
+      path: leagues
+      cors: true
+      authorizer:
+        name: verify-token
+        resultTtlInSeconds: 3600
+        identitySource: method.request.header.Authorization
 
 updateLeague:
   handler: leagues/index.update
@@ -69,6 +83,10 @@ updateLeague:
         parameters: 
           paths: 
             id: true
+      authorizer:
+        name: verify-token
+        resultTtlInSeconds: 3600
+        identitySource: method.request.header.Authorization
 
 deleteLeagues:
   handler: leagues/index.delete
@@ -90,6 +108,10 @@ deleteLeagues:
         parameters: 
           paths: 
             id: true
+      authorizer:
+        name: verify-token
+        resultTtlInSeconds: 3600
+        identitySource: method.request.header.Authorization
 
 getAllLeagueUsers:
   handler: leagues/index.getAllUsers
@@ -111,6 +133,10 @@ getAllLeagueUsers:
         parameters: 
           paths: 
             id: true
+      authorizer:
+        name: verify-token
+        resultTtlInSeconds: 3600
+        identitySource: method.request.header.Authorization
 
 creataeLeagueUsers:
   handler: leagues/index.createUser
@@ -132,6 +158,10 @@ creataeLeagueUsers:
         parameters: 
           paths: 
             id: true
+      authorizer:
+        name: verify-token
+        resultTtlInSeconds: 3600
+        identitySource: method.request.header.Authorization
 
 deleteLeagueUsers:
   handler: leagues/index.deleteUser
@@ -154,6 +184,10 @@ deleteLeagueUsers:
           paths: 
             id: true
             uid: true
+      authorizer:
+        name: verify-token
+        resultTtlInSeconds: 3600
+        identitySource: method.request.header.Authorization
 
 getAllLeaguesForUser:
   handler: leagues/index.getAllForUser
@@ -175,3 +209,7 @@ getAllLeaguesForUser:
         parameters: 
           paths: 
             id: true
+      authorizer:
+        name: verify-token
+        resultTtlInSeconds: 3600
+        identitySource: method.request.header.Authorization
