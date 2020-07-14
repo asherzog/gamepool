@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs')
 const queries = require('../db/queries/leagues')
 const leagueUserQueries = require('../db/queries/leagueUsers')
 const { handleError } = require('../common')
+const { user } = require('../common/tableNames')
 
 exports.getAll = async () => {
   try {
@@ -22,7 +23,15 @@ exports.getSingle = async (event) => {
     const league_id = Buffer.from(id, 'base64').toString('utf-8').split('lid=')[1]
     if (!league_id) return handleError('err: ', 404, `Invalid league identifier` )
     const result = await queries.getLeagueById(league_id)
-    const users = await leagueUserQueries.getAllLeagueUsers(league_id)
+    const allUsers = await leagueUserQueries.getAllLeagueUsers(league_id)
+    const standings = await leagueUserQueries.getLeagueStandings(league_id)
+    let users = []
+    for(let i=0; i<allUsers.length; i++) {
+      users.push({
+      ...allUsers[i], 
+      ...(standings.find((user) => user.user_id === allUsers[i].uid))}
+      )
+    }
     const isMember = users.some(user => user.uid === user_id)
     if (!isMember) return handleError('err: ', 400, `UnAuthorized` )
     if (result.length) {
@@ -227,6 +236,25 @@ exports.getAllForUser = async (event) => {
     return {
       statusCode: 200,
       body: JSON.stringify(obscured)
+    }
+  } catch (e) {
+    return handleError(e)
+  }
+}
+
+exports.getStandings = async (event) => {
+  try {
+    const { id } = event.pathParameters
+    const league_id = Buffer.from(id, 'base64').toString('utf-8').split('lid=')[1]
+    if (!league_id) return handleError('err: ', 404, `Invalid league identifier` )
+    const result = await leagueUserQueries.getLeagueStandings(league_id)
+    if (result.length) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify(result)
+      }
+    } else {
+      return handleError('err: ', 404, `League: ${id}, not found` )
     }
   } catch (e) {
     return handleError(e)

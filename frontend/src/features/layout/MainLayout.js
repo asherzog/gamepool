@@ -14,7 +14,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import List from '@material-ui/core/List'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
-import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import GroupAddIcon from '@material-ui/icons/GroupAdd'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'

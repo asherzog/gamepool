@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import Standings from './Standings'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Container from '@material-ui/core/Container'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { connect, useDispatch, useSelector } from 'react-redux'
 import { fetchAllLeagues, fetchLeague } from './leaguesSlice'
+import { Toolbar } from '@material-ui/core'
 
 const mapDispatch = { fetchAllLeagues, fetchLeague }
 
@@ -23,7 +25,6 @@ function Leagues() {
   const loading = useSelector(state => state.leagues.loading)
   const error = useSelector(state => state.leagues.error)
   const leagues = useSelector(state => state.leagues.leagues)
-  const currentLeague = useSelector(state => state.leagues.current)
   const dispatch = useDispatch()
   const classes = useStyles()
   const navigate = useNavigate()
@@ -54,19 +55,24 @@ function Leagues() {
     }
   }
 
-  const renderLeague = (currentLeague) => {
-    return <div><pre>{JSON.stringify(currentLeague, undefined, 2)}</pre></div>
+  const renderLeague = () => {
+    return (
+      <Container maxWidth='sm'>
+        <Toolbar />
+        <Standings />
+      </Container>
+    )
   }
 
   return (
     <Container maxWidth="lg">
-      <h1>Leagues:</h1>
+      {/* <Toolbar /> */}
       {loading ? 
         <CircularProgress size={54} /> : 
       error ? 
         `ERR: ${error}` :
       params.id ? 
-        renderLeague(currentLeague) : 
+        renderLeague() : 
       renderLeagues(leagues)}
     </Container>
   ) 
