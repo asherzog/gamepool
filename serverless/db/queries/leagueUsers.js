@@ -1,5 +1,6 @@
 const knex = require('../connection')
 const tableNames = require('../../common/tableNames')
+const { andWhere } = require('../connection')
 
 async function createLeagueUser(user) {
   const { user_id, league_id } = user
@@ -68,6 +69,16 @@ function updateLeagueUser(id, user) {
     .returning(['id', 'league_id', 'user_id', 'is_admin', 'is_creator'])
 }
 
+function getLeagueStandings(league_id) {
+  return knex(tableNames.pick)
+    .select('pick.user_id')
+    .count('game.winning_id AS wins')
+    .innerJoin(tableNames.game, 'pick.game_id', 'game.id')
+    .where(`pick.league_id`, league_id)
+    .andWhere('pick.team_id', '=', knex.ref('game.winning_id'))
+    .groupBy('pick.user_id')
+}
+
 module.exports = {
   createLeagueUser,
   deleteLeagueUser,
@@ -75,5 +86,6 @@ module.exports = {
   deleteUserFromLeague,
   getAllLeagueUsers,
   getLeagueUserById,
+  getLeagueStandings,
   updateLeagueUser
 }

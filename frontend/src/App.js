@@ -6,6 +6,7 @@ import Register from './features/auth/Register'
 import Leagues from './features/leagues/Leagues'
 import Create from './features/leagues/Create'
 import Join from './features/leagues/Join'
+import User from './features/users/User'
 import logo from './logo.svg'
 import MainLayout from './features/layout/MainLayout'
 import './App.css'
@@ -70,6 +71,7 @@ function App() {
           <WithAuth path="/leagues/create" element={<Create />} />
           <WithAuth path="/leagues/join" element={<Join />} />
           <WithAuth path="/leagues/:id" element={<Leagues />} />
+          <WithAuth path="/users/:id" element={<User />} />
         </Routes>
         </div>
       }
