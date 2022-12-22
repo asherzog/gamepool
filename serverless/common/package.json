@@ -7,7 +7,7 @@
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "cookie": "^0.4.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "pg-connection-string": "^2.2.3"
   },
   "devDependencies": {},
